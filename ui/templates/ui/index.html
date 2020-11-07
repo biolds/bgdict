@@ -26,6 +26,11 @@
     <link href="/static/kbd/css/keyboard-previewkeyset.min.css" rel="stylesheet">
     <script type="application/javascript">
         $(document).ready(function () {
+            let urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('search') && $('#id_search').length) {
+                $('#id_search').val(urlParams.get('search'));
+            }
+
             $('#id_search').keyboard({
                 layout: 'custom',
                 //layout: 'bg-ph',
