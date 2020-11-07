@@ -52,7 +52,7 @@ def index(request):
         })
     else:
         last_seen = Word.objects.exclude(last_seen__isnull=True).order_by('-last_seen')[:5]
-        top = Word.objects.order_by('-views', '-last_seen')[:5]
+        top = Word.objects.exclude(views=0).order_by('-views', '-last_seen')[:5]
         favorite = Word.objects.filter(favorite=True).order_by('-last_seen')[:5]
         context['panels'] = [{
             'title': 'Last seen',
