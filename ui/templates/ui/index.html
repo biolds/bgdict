@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>BGDict{% if search %} - {{ search %}{% endif %}</title>
     <link href="/static/css/default.css" rel="stylesheet" type="text/css">
     <link href="/static/css/night.css" rel="alternate stylesheet" title="Night" type="text/css">
 
@@ -81,7 +82,7 @@
 
 {% if panels %}
     {% for panel in panels %}
-        <div style="float: left; width: 33%; {% if forloop.counter0 == 1 %}background-color: #e0f0f0; height: 100%;{% endif %}">
+        <div style="padding: 10px; float: left; width: 30%; {% if forloop.counter0 == 1 %}background-color: #e0f0f0; height: 100%;{% endif %}">
             {{ panel.title }}
             <hr>
             {% for w in panel.words %}

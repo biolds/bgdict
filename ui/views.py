@@ -38,7 +38,8 @@ def index(request):
 
         context.update({
             'results': words,
-            'msg': msg
+            'msg': msg,
+            'search': search
         })
     else:
         last_seen = Word.objects.exclude(last_seen__isnull=True).order_by('-last_seen')[:5]

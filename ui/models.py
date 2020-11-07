@@ -19,4 +19,5 @@ class Word(models.Model):
         else:
             html += '♡'
         html += '</a>'
-        return mark_safe(html + self.trans_html)
+        html += self.trans_html
+        return mark_safe(html)
