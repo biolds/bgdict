@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
+from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
 from django import forms
 
 from .models import Word
@@ -22,8 +23,16 @@ def index(request):
 
     if form.is_valid():
         search = form.cleaned_data['search']
-        words = Word.objects.filter(trans_text__search=search)
-        words = words | Word.objects.filter(word__search=search)
+        vectors = SearchVector('trans_text', config='bulgarian') + SearchVector('word', config='bulgarian')
+        query = SearchQuery(search, config='bulgarian')
+        words = Word.objects.annotate(rank=SearchRank(vectors, query)).filter(rank__gt=0.05).order_by('-rank')[:5]
+
+        if len(words) == 0:
+            words = Word.objects.annotate(rank=SearchRank(vectors, query)).exclude(rank=0).order_by('-rank')[:5]
+
+        if len(words) == 0:
+            words = Word.objects.filter(trans_text__iregex=r'\y%s\y' % search)[:5]
+
         count = words.count()
         if count:
             msg = '%i match.' % count

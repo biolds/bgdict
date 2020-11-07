@@ -14,6 +14,8 @@ class Word(models.Model):
 
     def to_html(self):
         html = '<a class="favorite" style="color: #f00; float: right;" href="%s">' % reverse('favorite', args=(self.pk,))
+        if hasattr(self, 'rank'):
+            html += '%0.1f' %  self.rank + ' '
         if self.favorite:
             html += '♥'
         else:

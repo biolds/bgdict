@@ -27,7 +27,7 @@ git clone https://github.com/quasoft/postgres-tsearch-bulgarian.git
 cp bulgarian.* /usr/share/postgresql/11/tsearch_data/
 ```
 
-psql:
+Psql setup, needs to be run as the same PG user as the django app `psql -U django -d django -W`:
 
 ```
 CREATE TEXT SEARCH CONFIGURATION bulgarian (COPY = simple);
@@ -43,4 +43,5 @@ CREATE TEXT SEARCH DICTIONARY bulgarian_simple (
 );
 ALTER TEXT SEARCH CONFIGURATION bulgarian ALTER MAPPING FOR asciiword, asciihword, hword, hword_part, word WITH bulgarian_ispell, bulgarian_simple;
 ```
+))
 
