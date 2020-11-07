@@ -64,7 +64,7 @@
 {% if full %}
 <div id="formdiv">
     <form>
-        <input type="text" name="search" maxlength="1024" required="" id="id_search" style="background-color: #fff">
+        <input type="text" name="search" maxlength="1024" required="" id="id_search">
         <input type="submit" value="Search">
         <button value="Keyboard">🇧🇬</button>
         <a href="/">Clear</a>
@@ -75,10 +75,14 @@
 
 {{ msg }}
 <hr>
-{% for r in results %}
-    {{ r.to_html }}
-    <hr>
-{% endfor %}
+{% if results %}
+    <div style="width: 50%;">
+        {% for r in results %}
+            {{ r.to_html }}
+            <hr>
+        {% endfor %}
+    </div>
+{% endif %}
 
 {% if panels %}
     {% for panel in panels %}
