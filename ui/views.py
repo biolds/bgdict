@@ -1,3 +1,7 @@
+from datetime import datetime
+import unicodedata
+from urllib.parse import quote
+
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
@@ -41,19 +45,27 @@ def index(request):
 
         if not nostat:
             for w in words:
+                if w.last_seen is None or w.last_seen.date() != datetime.today():
+                    w.views += 1
                 w.last_seen = timezone.now()
-                w.views += 1
                 w.save()
+
+        if unicodedata.name(search.strip()[0]).startswith('CYRILLIC'):
+            dict_link = 'https://www.dict.com/?t=bg&set=_bgen&w='
+        else:
+            dict_link = 'https://www.dict.com/?t=bg&set=_enbg&w='
+        dict_link += quote(search)
 
         context.update({
             'results': words,
             'msg': msg,
-            'search': search
+            'search': search,
+            'dict_link': dict_link
         })
     else:
         last_seen = Word.objects.exclude(last_seen__isnull=True).order_by('-last_seen')[:5]
         top = Word.objects.exclude(views=0).order_by('-views', '-last_seen')[:5]
-        favorite = Word.objects.filter(favorite=True).order_by('-last_seen')[:5]
+        favorite = Word.objects.exclude(last_seen__isnull=True).filter(favorite=True).order_by('-last_seen')[:5]
         context['panels'] = [{
             'title': 'Last seen',
             'words': last_seen
