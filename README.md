@@ -13,7 +13,7 @@ apt install python3-django python3-psycopg2 postgresql
 
 su postgres -c "psql --command \"CREATE USER django WITH SUPERUSER PASSWORD 'django'\""
 su postgres -c "psql --command \"CREATE DATABASE django OWNER django\""
- 
+
 python3 manage.py makemigrations
 python3 manage.py migrate
 python3 manage.py import_dict <dict.json>
@@ -33,8 +33,8 @@ Psql setup, needs to be run as the same PG user as the django app `psql -U djang
 CREATE TEXT SEARCH CONFIGURATION bulgarian (COPY = simple);
 CREATE TEXT SEARCH DICTIONARY bulgarian_ispell (
     TEMPLATE = ispell,
-    DictFile = bulgarian, 
-    AffFile = bulgarian, 
+    DictFile = bulgarian,
+    AffFile = bulgarian,
     StopWords = bulgarian
 );
 CREATE TEXT SEARCH DICTIONARY bulgarian_simple (
@@ -45,3 +45,22 @@ ALTER TEXT SEARCH CONFIGURATION bulgarian ALTER MAPPING FOR asciiword, asciihwor
 ```
 ))
 
+#
+
+```
+# cat /etc/systemd/system/bgdict.service
+[Unit]
+Description=Django BGDict
+After=syslog.target
+
+[Service]
+ExecStart=/bg-dict/run.sh
+RuntimeDirectory=bg-dict/
+Restart=always
+KillSignal=SIGQUIT
+Type=simple
+StandardError=syslog
+
+[Install]
+WantedBy=multi-user.target
+```
