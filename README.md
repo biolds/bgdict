@@ -16,7 +16,7 @@ su postgres -c "psql --command \"CREATE DATABASE django OWNER django\""
 
 python3 manage.py makemigrations
 python3 manage.py migrate
-python3 manage.py import_dict <dict.json>
+python3 manage.py dict_import <dict.json>
 ```
 
 # postgresql fulltext search
