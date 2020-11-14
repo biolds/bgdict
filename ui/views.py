@@ -15,6 +15,38 @@ class SearchForm(forms.Form):
     search = forms.CharField(max_length=1024)
 
 
+
+# based on https://stackoverflow.com/questions/35942129/remove-accent-marks-from-characters-while-preserving-other-diacritics
+ACCENT_MAPPING = {
+    'а́': 'а',
+    'а̀': 'а',
+    'е́': 'е',
+    'ѐ': 'е',
+    'и́': 'и',
+    'ѝ': 'и',
+    'о́': 'о',
+    'о̀': 'о',
+    'у́': 'у',
+    'у̀': 'у',
+    'ы́': 'ы',
+    'ы̀': 'ы',
+    'э́': 'э',
+    'э̀': 'э',
+    'ю́': 'ю',
+    '̀ю': 'ю',
+    'я́́': 'я',
+    'я̀': 'я',
+}
+ACCENT_MAPPING = {unicodedata.normalize('NFKC', i): j for i, j in ACCENT_MAPPING.items()}
+
+
+def unaccentify(s):
+    source = unicodedata.normalize('NFKC', s)
+    for old, new in ACCENT_MAPPING.items():
+        source = source.replace(old, new)
+    return source
+
+
 def index(request):
     form = SearchForm(request.GET)
     full = request.GET.get('full') != 'false'
@@ -26,7 +58,7 @@ def index(request):
     }
 
     if form.is_valid():
-        search = form.cleaned_data['search']
+        search = unaccentify(form.cleaned_data['search'])
         vectors = SearchVector('trans_text', config='bulgarian') + SearchVector('word', config='bulgarian')
         query = SearchQuery(search, config='bulgarian')
         words = Word.objects.annotate(rank=SearchRank(vectors, query)).filter(rank__gt=0.05).order_by('-rank')[:5]

@@ -1,7 +1,9 @@
 import json
 import re
 from django.core.management.base import BaseCommand, CommandError
+
 from ui.models import Word
+from ui.views import unaccentify
 
 
 class Command(BaseCommand):
@@ -26,7 +28,8 @@ class Command(BaseCommand):
             text = []
             for t in match:
                 text += [t.group(1)]
-            Word.objects.create(word=word, trans_html=trans, trans_text=' '.join(text))
+            trans_text = unaccentify(' '.join(text))
+            Word.objects.create(word=word, trans_html=trans, trans_text=trans_text)
 
             i += 1
             if i % 100 == 0:
