@@ -43,9 +43,8 @@ CREATE TEXT SEARCH DICTIONARY bulgarian_simple (
 );
 ALTER TEXT SEARCH CONFIGURATION bulgarian ALTER MAPPING FOR asciiword, asciihword, hword, hword_part, word WITH bulgarian_ispell, bulgarian_simple;
 ```
-))
 
-#
+# Systemd service
 
 ```
 # cat /etc/systemd/system/bgdict.service
