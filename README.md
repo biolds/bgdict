@@ -9,7 +9,7 @@ python3 main.py freedict-eng-bul-2020.10.04.slob freedict-eng-bul-2020.10.04.jso
 # server install
 
 ```
-apt install python3-django python3-psycopg2 postgresql libjs-jquery
+apt install python3-django python3-psycopg2 postgresql libjs-jquery uwsgi uwsgi-plugin-python3 python3-django-uwsgi
 
 su postgres -c "psql --command \"CREATE USER django WITH SUPERUSER PASSWORD 'django'\""
 su postgres -c "psql --command \"CREATE DATABASE django OWNER django\""
