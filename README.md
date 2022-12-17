@@ -9,7 +9,7 @@ python3 main.py freedict-eng-bul-2020.10.04.slob freedict-eng-bul-2020.10.04.jso
 # server install
 
 ```
-apt install python3-django python3-psycopg2 postgresql
+apt install python3-django python3-psycopg2 postgresql libjs-jquery
 
 su postgres -c "psql --command \"CREATE USER django WITH SUPERUSER PASSWORD 'django'\""
 su postgres -c "psql --command \"CREATE DATABASE django OWNER django\""
@@ -24,7 +24,7 @@ python3 manage.py dict_import <dict.json>
 ```
 git clone https://github.com/quasoft/postgres-tsearch-bulgarian.git
 
-cp bulgarian.* /usr/share/postgresql/11/tsearch_data/
+cp bulgarian.* /usr/share/postgresql/13/tsearch_data/
 ```
 
 Psql setup, needs to be run as the same PG user as the django app `psql -U django -d django -W`:
