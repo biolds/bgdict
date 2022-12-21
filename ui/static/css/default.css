@@ -64,6 +64,7 @@ ol.sense {
     font-weight: bold;
     color: maroon;
     padding-bottom: 0.25rem;
+    display: none;
 }
 
 .pron:before {
